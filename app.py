@@ -1,59 +1,63 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, jsonify, request
+from flask_mysqldb import MySQL
+from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///store.db'
-db = SQLAlchemy(app)
+CORS(app) 
+# MySQL configurations
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = None
+app.config['MYSQL_DB'] = 'newdbmysql'
 
-# Product model
-class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Float, nullable=False)
+mysql = MySQL(app)
 
-    def __repr__(self):
-        return f"Product('{self.name}', '{self.price}')"
+@app.route('/', methods=['GET'])
+def get_all_records():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM flashcards")
+    rows = cur.fetchall()
+    cur.close()
+    data = [{ "id": row[0], "text1": row[1], "text2": row[2], "description": row[3]} for row in rows]
+    return jsonify(data)
 
-db.create_all()
+@app.route('/<int:id>', methods=['GET'])
+def get_record(id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM flashcards WHERE id = %s", (id,))
+    row = cur.fetchone()
+    cur.close()
+    if row:
+        data = { "id": row[0], "text1": row[1], "text2": row[2], "description": row[3]}
+        return jsonify(data)
+    else:
+        return "Record not found", 404
 
-@app.route('/')
-def index():
-    products = Product.query.all()
-    return render_template('index.html', products=products)
+@app.route('/', methods=['POST'])
+def insert_record():
+    data = request.json
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO flashcards (text1, text2, description) VALUES (%s, %s, %s)", (data['text1'], data['text2'], data['description']))
+    mysql.connection.commit()
+    cur.close()
+    return "Record inserted successfully"
 
-@app.route('/product/<int:product_id>')
-def product(product_id):
-    product = Product.query.get_or_404(product_id)
-    return render_template('product.html', product=product)
+@app.route('/', methods=['PUT'])
+def update_record():
+    data = request.json
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE flashcards SET text1 = %s, text2 = %s, description = %s WHERE id = %s", (data['text1'], data['text2'], data['description'], data['id']))
+    mysql.connection.commit()
+    cur.close()
+    return "Record updated successfully"
 
-@app.route('/product/add', methods=['GET', 'POST'])
-def add_product():
-    if request.method == 'POST':
-        name = request.form['name']
-        price = float(request.form['price'])
-        new_product = Product(name=name, price=price)
-        db.session.add(new_product)
-        db.session.commit()
-        return redirect(url_for('index'))
-    return render_template('add_product.html')
-
-@app.route('/product/<int:product_id>/update', methods=['GET', 'POST'])
-def update_product(product_id):
-    product = Product.query.get_or_404(product_id)
-    if request.method == 'POST':
-        product.name = request.form['name']
-        product.price = float(request.form['price'])
-        db.session.commit()
-        return redirect(url_for('index'))
-    return render_template('update_product.html', product=product)
-
-@app.route('/product/<int:product_id>/delete', methods=['POST'])
-def delete_product(product_id):
-    product = Product.query.get_or_404(product_id)
-    db.session.delete(product)
-    db.session.commit()
-    return redirect(url_for('index'))
+@app.route('/<int:id>', methods=['DELETE'])
+def delete_record(id):
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM flashcards WHERE id = %s", (id,))
+    mysql.connection.commit()
+    cur.close()
+    return "Record deleted successfully"
 
 if __name__ == '__main__':
     app.run(debug=True)
-
