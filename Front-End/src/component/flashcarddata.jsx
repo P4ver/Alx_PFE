@@ -25,10 +25,10 @@ const RecordsComponent = () => {
   useEffect(() => {
     fetchData(setRecords);
   }, [setRecords]);
-  // const handleChange = e => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
+  const handleChangeAdd = e => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -91,11 +91,11 @@ const RecordsComponent = () => {
         console.error('Error updating card:', error);
       });
   };
-const [btn, setBtn] = useState(false)
-const handleBtn = ()=>{
-  setBtn(!btn)
-  console.log("yes")
-}
+// const [btn, setBtn] = useState(false)
+// const handleBtn = ()=>{
+//   setBtn(!btn)
+//   console.log("yes")
+// }
 
   return (
     <div>
@@ -142,6 +142,7 @@ const handleBtn = ()=>{
                     <h2>{record.title}</h2>
                     <input
                       type="text"
+                      // value={ updatedText1 ||  record.text1}
                       value={updatedText1}
                       onChange={handleChange}
                       name="text1"
@@ -166,7 +167,17 @@ const handleBtn = ()=>{
                     Update Card
                   </button>
                 </div>
-              } 
+              }
+
+              {record.id == selectedCardId && <>
+                <input
+                      type="text"
+                      value={record.text1}
+                      onChange={handleChange}
+                      name="text1"
+                      placeholder="Enter Text1"
+                    />
+              </>} 
 
           </li>
         ))}
@@ -196,7 +207,7 @@ const handleBtn = ()=>{
                   name="text1"
                   id="text1"
                   value={formData.text1}
-                  onChange={handleChange}
+                  onChange={handleChangeAdd}
                   className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -209,7 +220,7 @@ const handleBtn = ()=>{
                   name="text2"
                   id="text2"
                   value={formData.text2}
-                  onChange={handleChange}
+                  onChange={handleChangeAdd}
                   className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
@@ -222,7 +233,7 @@ const handleBtn = ()=>{
                   name="description"
                   id="description"
                   value={formData.description}
-                  onChange={handleChange}
+                  onChange={handleChangeAdd}
                   className="mt-1 p-2 block w-full border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 />
               </div>
