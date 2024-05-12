@@ -42,11 +42,20 @@ def insert_record():
     cur.close()
     return "Record inserted successfully"
 
-@app.route('/', methods=['PUT'])
-def update_record():
+# @app.route('/', methods=['PUT'])
+# def update_record():
+#     data = request.json
+#     cur = mysql.connection.cursor()
+#     cur.execute("UPDATE flashcards SET text1 = %s, text2 = %s, description = %s WHERE id = %s", (data['text1'], data['text2'], data['description'], data['id']))
+#     mysql.connection.commit()
+#     cur.close()
+#     return "Record updated successfully"
+
+@app.route('/<int:record_id>', methods=['PUT'])
+def update_record(record_id):
     data = request.json
     cur = mysql.connection.cursor()
-    cur.execute("UPDATE flashcards SET text1 = %s, text2 = %s, description = %s WHERE id = %s", (data['text1'], data['text2'], data['description'], data['id']))
+    cur.execute("UPDATE flashcards SET text1 = %s, text2 = %s, description = %s WHERE id = %s", (data['text1'], data['text2'], data['description'], record_id))
     mysql.connection.commit()
     cur.close()
     return "Record updated successfully"
