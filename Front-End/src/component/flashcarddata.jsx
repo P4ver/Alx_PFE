@@ -91,11 +91,7 @@ const RecordsComponent = () => {
         console.error('Error updating card:', error);
       });
   };
-// const [btn, setBtn] = useState(false)
-// const handleBtn = ()=>{
-//   setBtn(!btn)
-//   console.log("yes")
-// }
+
 
   return (
     <div>
@@ -105,27 +101,6 @@ const RecordsComponent = () => {
         <h2 className="font-serif text-2xl font-bold sm:text-3xl">AlxCards</h2>
       </div>
 
-      {/* 
-        <h2>Add New Record</h2>
-        <form onSubmit={handleSubmit}>
-          <label>
-            text1:
-            <input type="text" name="text1" value={formData.text1} onChange={handleChange} />
-          </label>
-          <br />
-          <label>
-            text2:
-            <input type="text" name="text2" value={formData.text2} onChange={handleChange} />
-          </label>
-          <br />
-          <label>
-            description:
-            <input type="text" name="description" value={formData.description} onChange={handleChange} />
-          </label>
-          <br />
-          <button type="submit">Add Record</button>
-        </form>
-      */}
 
       <h2 className="text-lg font-semibold mb-4 text-center text-white">Records</h2>
       <ul className='flex justify-center flex-wrap max-w-[1100px] mx-auto'>

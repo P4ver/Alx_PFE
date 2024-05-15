@@ -46,7 +46,6 @@ function NavBar(props) {
                 <div class="relative text-blue-600 lg:ml-32 lg:w-1/2 hidden lg:block">
                     <div class="border-b-8 border-b-blue-600 max-w-lg mx-auto mb-10">
                     <img class="w-full h-full object-contain" src="https://tech.alxafrica.com/hs-fs/hubfs/ALX%20Logo-08.png?width=1512&height=926&name=ALX%20Logo-08.png" alt="" />
-                    {/* <img class="w-full h-full object-contain" src="/images/sisa0dVB-OE35qZ9CRvF2.png" alt="" /> */}
                     </div>
                 </div>
                 </div>
