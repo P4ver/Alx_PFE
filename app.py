@@ -12,6 +12,7 @@ app.config['MYSQL_DB'] = 'newdbmysql'
 
 mysql = MySQL(app)
 
+# Route to get all records from the 'flashcards' table
 @app.route('/', methods=['GET'])
 def get_all_records():
     cur = mysql.connection.cursor()
@@ -21,6 +22,8 @@ def get_all_records():
     data = [{ "id": row[0], "text1": row[1], "text2": row[2], "description": row[3]} for row in rows]
     return jsonify(data)
 
+
+# Route to get a single record by its ID from the 'flashcards' table
 @app.route('/<int:id>', methods=['GET'])
 def get_record(id):
     cur = mysql.connection.cursor()
@@ -33,6 +36,7 @@ def get_record(id):
     else:
         return "Record not found", 404
 
+# Route to insert a new record into the 'flashcards' table
 @app.route('/', methods=['POST'])
 def insert_record():
     data = request.json
@@ -51,6 +55,8 @@ def insert_record():
 #     cur.close()
 #     return "Record updated successfully"
 
+
+# Route to update an existing record in the 'flashcards' table
 @app.route('/<int:record_id>', methods=['PUT'])
 def update_record(record_id):
     data = request.json
@@ -60,6 +66,7 @@ def update_record(record_id):
     cur.close()
     return "Record updated successfully"
 
+# Route to delete a record from the 'flashcards' table by its ID
 @app.route('/<int:id>', methods=['DELETE'])
 def delete_record(id):
     cur = mysql.connection.cursor()
