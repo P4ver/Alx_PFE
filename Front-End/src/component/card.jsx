@@ -1,7 +1,7 @@
 import React from 'react';
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdEdit } from "react-icons/md";
 
-function Card({text1, text2, description, handleDelete}) {
+function Card({text1, text2, description, handleDelete, handleEdit}) {
     return (
         <div >
             <article className="relative flex flex-col drop-shadow-lg overflow-hidden rounded-lg border bg-gradient-to-br from-blue-500 to-green-500">
@@ -15,6 +15,7 @@ function Card({text1, text2, description, handleDelete}) {
                 <h3 className="mb-2 text-sm text-gray-100"><span className='font-bold text-white font-bold bg-slate-700 p-1 rounded-md'>FR </span>- {text2}</h3>
                 <p className='text-gray-100 text-xs'>{description}</p>
                 <button onClick={handleDelete} className='absolute top-2 left-2 text-white w-6 h-6 bg-slate-800 rounded-[50%] flex justify-center items-center'><MdDelete/></button>
+                <button onClick={handleEdit} className='absolute top-2 left-10 text-white w-6 h-6 bg-slate-800 rounded-[50%] flex justify-center items-center'><MdEdit/></button>
                 </div>
             </article>     
         </div>
